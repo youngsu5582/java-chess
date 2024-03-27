@@ -22,6 +22,14 @@ public class Pieces {
         piece.move(point);
     }
 
+    public Optional<King> findKingWithColor(final Color color) {
+        return value.stream()
+                    .filter(piece -> piece.isEqualColor(color))
+                    .filter(King.class::isInstance)
+                    .map(King.class::cast)
+                    .findFirst();
+    }
+
     public Optional<Piece> findPieceWithPoint(final Point point) {
         return value.stream()
                     .filter(piece -> piece.isEqualPoint(point))

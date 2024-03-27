@@ -6,6 +6,7 @@ import domain.chess.Color;
 import domain.chess.Point;
 import factory.ChessBoardGenerator;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,20 @@ public class ChessBoard {
     }
 
     public ChessBoard(final Pieces pieces, final Color color) {
+        validatePieces(pieces);
         this.pieces = pieces;
         this.turn = color;
+    }
+
+    private void validatePieces(final Pieces pieces) {
+        final var kingCount = Arrays.stream(Color.values())
+                                    .map(pieces::findKingWithColor)
+                                    .filter(Optional::isPresent)
+                                    .toList();
+
+        if (kingCount.size() != Color.values().length) {
+            throw new IllegalStateException("왕이 두개가 아닙니다");
+        }
     }
 
 
@@ -30,7 +43,7 @@ public class ChessBoard {
         turn = turn.reverse();
     }
 
-    public double getScore() {
+    public double getTurnScore() {
         return pieces.getScore(turn);
     }
 
