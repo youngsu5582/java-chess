@@ -51,7 +51,7 @@ public abstract class Piece implements Movable {
     }
 
     protected final boolean hasEnemyPiece(final Point point, final PieceCheckable checker) {
-        return checker.isEqualColorInPoint(this.color, point);
+        return checker.isNotEqualColorInPoint(this.color, point);
     }
 
     protected final boolean hasEnemyPieceOrEmpty(final Point endPoint, final PieceCheckable checker) {
