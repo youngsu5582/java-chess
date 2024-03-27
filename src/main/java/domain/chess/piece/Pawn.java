@@ -20,28 +20,28 @@ public class Pawn extends Piece {
     }
 
     public boolean canMove(final Point movePoint, final List<Piece> piecesList) {
-        final Pieces pieces = new Pieces(piecesList);
-        return canMovePoint(movePoint, pieces) || canMovePointWithAttack(movePoint, pieces);
+        final PieceChecker checker = new PieceChecker(piecesList);
+        return canMovePoint(movePoint, checker) || canMovePointWithAttack(movePoint, checker);
     }
 
-    private boolean canMovePoint(final Point movePoint, final Pieces pieces) {
+    private boolean canMovePoint(final Point movePoint, final PieceChecker checker) {
         final Direction direction = this.point.calculate(movePoint);
         if (notContainDirection(direction) || direction.isDiagonal()) {
             return false;
         }
-        return singleCase(movePoint, pieces) || doubleCase(movePoint, pieces);
+        return singleCase(movePoint, checker) || doubleCase(movePoint, checker);
     }
 
-    private boolean singleCase(final Point movePoint, final Pieces pieces) {
-        return canMovePointOne(movePoint) && notExistPiece(movePoint, pieces);
+    private boolean singleCase(final Point movePoint, final PieceChecker checker) {
+        return canMovePointOne(movePoint) && notExistPiece(movePoint, checker);
     }
 
-    private boolean doubleCase(final Point movePoint, final Pieces pieces) {
+    private boolean doubleCase(final Point movePoint, final PieceChecker checker) {
         final Direction direction = this.point.calculate(movePoint);
         if (direction.isDiagonal()) {
             return false;
         }
-        return doubleCase(movePoint, direction) && notExistPieces(pieces, direction.movePoint(this.point), movePoint);
+        return doubleCase(movePoint, direction) && notExistPieces(checker, direction.movePoint(this.point), movePoint);
     }
 
     private boolean doubleCase(final Point point, final Direction direction) {
@@ -53,12 +53,12 @@ public class Pawn extends Piece {
         return false;
     }
 
-    private boolean canMovePointWithAttack(final Point movePoint, final Pieces pieces) {
+    private boolean canMovePointWithAttack(final Point movePoint, final PieceChecker checker) {
         final Direction direction = this.point.calculate(movePoint);
         if (notContainDirection(direction) || direction.isVertical()) {
             return false;
         }
-        return canMovePointOne(movePoint) && hasEnemyPiece(movePoint, pieces);
+        return canMovePointOne(movePoint) && hasEnemyPiece(movePoint, checker);
     }
 
     private boolean notContainDirection(final Direction direction) {

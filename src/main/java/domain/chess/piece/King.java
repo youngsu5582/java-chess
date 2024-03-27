@@ -16,6 +16,6 @@ public class King extends Piece {
     }
 
     public boolean canMove(final Point movePoint, final List<Piece> pieceList) {
-        return canMovePointOne(movePoint) && hasEnemyPieceOrEmpty(movePoint, new Pieces(pieceList));
+        return canMovePointOne(movePoint) && hasEnemyPieceOrEmpty(movePoint, new PieceChecker(pieceList));
     }
 }

@@ -39,11 +39,11 @@ public abstract class Piece implements Movable {
         return false;
     }
 
-    protected final boolean notExistPieceInPath(final Point endPoint, final Pieces pieces) {
-        return !hasAnyPieceInPath(endPoint, pieces);
+    protected final boolean notExistPieceInPath(final Point endPoint, final PieceCheckable checker) {
+        return !hasAnyPieceInPath(endPoint, checker);
     }
 
-    protected final boolean hasAnyPieceInPath(final Point endPoint, final Pieces pieces) {
+    protected final boolean hasAnyPieceInPath(final Point endPoint, final PieceCheckable checker) {
         final Direction direction = this.point.calculate(endPoint);
         final Point pathPoint = direction.movePoint(this.point);
 
@@ -53,24 +53,24 @@ public abstract class Piece implements Movable {
                 direction::movePoint);
 
         return pathPoints
-                .anyMatch(pieces::containPieceWithPoint);
+                .anyMatch(checker::containPieceWithPoint);
     }
 
-    protected final boolean notExistPieces(final Pieces pieces, final Point... points) {
+    protected final boolean notExistPieces(final PieceCheckable checker, final Point... points) {
         return Arrays.stream(points)
-                     .allMatch(value -> notExistPiece(value, pieces));
+                     .allMatch(value -> notExistPiece(value, checker));
     }
 
-    protected final boolean notExistPiece(final Point findPoint, final Pieces pieces) {
-        return !hasAnyPiece(findPoint, pieces);
+    protected final boolean notExistPiece(final Point findPoint, final PieceCheckable checker) {
+        return !hasAnyPiece(findPoint, checker);
     }
 
-    protected final boolean hasAnyPiece(final Point findPoint, final Pieces pieces) {
-        return pieces.containPieceWithPoint(findPoint);
+    protected final boolean hasAnyPiece(final Point findPoint, final PieceCheckable checker) {
+        return checker.containPieceWithPoint(findPoint);
     }
 
-    protected final boolean hasFriendPiece(final Point endPoint, final Pieces pieces) {
-        final Optional<Piece> optionalPiece = pieces.findPieceWithPoint(endPoint);
+    protected final boolean hasFriendPiece(final Point endPoint, final PieceCheckable checker) {
+        final Optional<Piece> optionalPiece = checker.findPieceWithPoint(endPoint);
         if (optionalPiece.isEmpty()) {
             return false;
         }
@@ -78,8 +78,8 @@ public abstract class Piece implements Movable {
         return this.color == toPiece.color;
     }
 
-    protected final boolean hasEnemyPiece(final Point endPoint, final Pieces pieces) {
-        final Optional<Piece> optionalPiece = pieces.findPieceWithPoint(endPoint);
+    protected final boolean hasEnemyPiece(final Point endPoint, final PieceCheckable checker) {
+        final Optional<Piece> optionalPiece = checker.findPieceWithPoint(endPoint);
         if (optionalPiece.isEmpty()) {
             return false;
         }
@@ -87,8 +87,8 @@ public abstract class Piece implements Movable {
         return this.color != toPiece.color;
     }
 
-    protected final boolean hasEnemyPieceOrEmpty(final Point endPoint, final Pieces pieces) {
-        return !hasFriendPiece(endPoint, pieces);
+    protected final boolean hasEnemyPieceOrEmpty(final Point endPoint, final PieceCheckable checker) {
+        return !hasFriendPiece(endPoint, checker);
     }
 
     public boolean isEqualPoint(final Point point) {

@@ -25,7 +25,7 @@ public class Knight extends Piece {
 
 
     public boolean canMove(final Point movePoint, final List<Piece> pieceList) {
-        return canMovePoint(movePoint) && hasEnemyPieceOrEmpty(movePoint, new Pieces(pieceList));
+        return canMovePoint(movePoint) && hasEnemyPieceOrEmpty(movePoint, new PieceChecker(pieceList));
     }
 
     private boolean canMovePoint(final Point movePoint) {

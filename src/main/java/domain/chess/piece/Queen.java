@@ -16,7 +16,7 @@ public class Queen extends Piece {
     }
 
     public boolean canMove(final Point movePoint, final List<Piece> pieceList) {
-        final Pieces pieces = new Pieces(pieceList);
-        return notExistPieceInPath(movePoint, pieces) && hasEnemyPieceOrEmpty(movePoint, pieces);
+        final PieceChecker checker = new PieceChecker(pieceList);
+        return notExistPieceInPath(movePoint, checker) && hasEnemyPieceOrEmpty(movePoint, checker);
     }
 }

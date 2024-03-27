@@ -23,8 +23,8 @@ public class Rook extends Piece {
     public boolean canMove(final Point movePoint, final List<Piece> pieceList) {
         final Direction direction = this.point.calculate(movePoint);
         if (DIRECTION_LIST.contains(direction)) {
-            final Pieces pieces = new Pieces(pieceList);
-            return notExistPieceInPath(movePoint, pieces) && hasEnemyPieceOrEmpty(movePoint, pieces);
+            final PieceChecker checker = new PieceChecker(pieceList);
+            return notExistPieceInPath(movePoint, checker) && hasEnemyPieceOrEmpty(movePoint, checker);
         }
         return false;
     }

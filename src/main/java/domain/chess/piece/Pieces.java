@@ -4,7 +4,7 @@ import domain.chess.Point;
 
 import java.util.*;
 
-public class Pieces {
+public class Pieces implements PieceCheckable {
 
     private final List<Piece> value;
 
