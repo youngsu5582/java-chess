@@ -7,8 +7,6 @@ import domain.chess.Point;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public abstract class Piece implements Movable {
 
@@ -40,20 +38,7 @@ public abstract class Piece implements Movable {
     }
 
     protected final boolean notExistPieceInPath(final Point endPoint, final PieceCheckable checker) {
-        return !hasAnyPieceInPath(endPoint, checker);
-    }
-
-    protected final boolean hasAnyPieceInPath(final Point endPoint, final PieceCheckable checker) {
-        final Direction direction = this.point.calculate(endPoint);
-        final Point pathPoint = direction.movePoint(this.point);
-
-        final Stream<Point> pathPoints = Stream.iterate(
-                pathPoint,
-                movePoint -> direction.canMovePoint(movePoint) && movePoint.notEquals(endPoint),
-                direction::movePoint);
-
-        return pathPoints
-                .anyMatch(checker::containPieceWithPoint);
+        return !checker.hasAnyPieceInPath(this.point, endPoint);
     }
 
     protected final boolean notExistPieces(final PieceCheckable checker, final Point... points) {
@@ -62,37 +47,27 @@ public abstract class Piece implements Movable {
     }
 
     protected final boolean notExistPiece(final Point findPoint, final PieceCheckable checker) {
-        return !hasAnyPiece(findPoint, checker);
+        return !checker.containPieceWithPoint(findPoint);
     }
 
-    protected final boolean hasAnyPiece(final Point findPoint, final PieceCheckable checker) {
-        return checker.containPieceWithPoint(findPoint);
-    }
-
-    protected final boolean hasFriendPiece(final Point endPoint, final PieceCheckable checker) {
-        final Optional<Piece> optionalPiece = checker.findPieceWithPoint(endPoint);
-        if (optionalPiece.isEmpty()) {
-            return false;
-        }
-        final Piece toPiece = optionalPiece.get();
-        return this.color == toPiece.color;
-    }
-
-    protected final boolean hasEnemyPiece(final Point endPoint, final PieceCheckable checker) {
-        final Optional<Piece> optionalPiece = checker.findPieceWithPoint(endPoint);
-        if (optionalPiece.isEmpty()) {
-            return false;
-        }
-        final Piece toPiece = optionalPiece.get();
-        return this.color != toPiece.color;
+    protected final boolean hasEnemyPiece(final Point point, final PieceCheckable checker) {
+        return checker.isEqualColorInPoint(this.color, point);
     }
 
     protected final boolean hasEnemyPieceOrEmpty(final Point endPoint, final PieceCheckable checker) {
-        return !hasFriendPiece(endPoint, checker);
+        return checker.isNotEqualColorInPoint(this.color, endPoint) || checker.isEmptyPoint(endPoint);
+    }
+
+    public boolean isEqualFile(final Point point) {
+        return this.point.isEqualFile(point);
     }
 
     public boolean isEqualPoint(final Point point) {
         return this.point.equals(point);
+    }
+
+    public boolean isEqualColor(final Color color) {
+        return this.color == color;
     }
 
     public boolean isBlack() {
