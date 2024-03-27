@@ -78,6 +78,8 @@ public abstract class Piece implements Movable {
         return this.color.isWhite();
     }
 
+    public abstract double getScore(List<Piece> pieces);
+
     public Point getPoint() {
         return this.point;
     }

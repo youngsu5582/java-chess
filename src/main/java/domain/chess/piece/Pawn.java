@@ -14,9 +14,9 @@ public class Pawn extends Piece {
     private static final List<Direction> WHITE_DIRECTION_LIST = List.of(UP, UP_LEFT, UP_RIGHT);
     private static final Rank WHITE_START_POSITION = Rank.TWO;
     private static final Rank BLACK_START_POSITION = Rank.SEVEN;
-    private static final Double SCORE = 1.0;
+    private static final double SCORE = 1.0;
 
-    private static final Double SAME_FILE_SCORE = 0.5;
+    private static final double SAME_FILE_SCORE = 0.5;
 
     public Pawn(final Point point, final Color color) {
         super(point, color);
@@ -82,6 +82,7 @@ public class Pawn extends Piece {
         return WHITE_START_POSITION.ordinal();
     }
 
+    @Override
     public double getScore(final List<Piece> pieces) {
         if (hasEqualFilePointAndFriend(pieces)) {
             return SAME_FILE_SCORE;
@@ -91,7 +92,8 @@ public class Pawn extends Piece {
 
     private boolean hasEqualFilePointAndFriend(final List<Piece> pieces) {
         return pieces.stream()
-                     .filter(piece -> piece.isEqualColor(this.color))
+                     .filter(Pawn.class::isInstance)
+                     .filter(piece -> piece.isEqualColor(this.color) && !piece.isEqualPoint(this.point))
                      .anyMatch(piece -> piece.isEqualFile(this.point));
     }
 

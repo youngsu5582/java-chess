@@ -10,6 +10,7 @@ import static domain.chess.Direction.*;
 
 public class Bishop extends Piece {
     private static final List<Direction> DIRECTION_LIST = List.of(DOWN_LEFT, DOWN_RIGHT, UP_LEFT, UP_RIGHT);
+    private static final double SCORE = 3.0;
 
     public Bishop(final Point point, final Color color) {
         super(point, color);
@@ -18,6 +19,11 @@ public class Bishop extends Piece {
     @Override
     public PieceStatus getStatus() {
         return PieceStatus.BISHOP;
+    }
+
+    @Override
+    public double getScore(final List<Piece> pieces) {
+        return SCORE;
     }
 
     public boolean canMove(final Point movePoint, final List<Piece> pieceList) {

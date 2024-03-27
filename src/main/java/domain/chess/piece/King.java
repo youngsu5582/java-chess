@@ -6,6 +6,8 @@ import domain.chess.Point;
 import java.util.List;
 
 public class King extends Piece {
+    private static final double SCORE = 0;
+
     public King(final Point point, final Color color) {
         super(point, color);
     }
@@ -13,6 +15,11 @@ public class King extends Piece {
     @Override
     public PieceStatus getStatus() {
         return PieceStatus.KING;
+    }
+
+    @Override
+    public double getScore(final List<Piece> pieces) {
+        return SCORE;
     }
 
     public boolean canMove(final Point movePoint, final List<Piece> pieceList) {

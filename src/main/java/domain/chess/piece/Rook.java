@@ -10,9 +10,16 @@ import static domain.chess.Direction.*;
 
 public class Rook extends Piece {
     private static final List<Direction> DIRECTION_LIST = List.of(UP, DOWN, RIGHT, LEFT);
+    private static final double SCORE = 5.0;
+
 
     public Rook(final Point point, final Color color) {
         super(point, color);
+    }
+
+    @Override
+    public double getScore(final List<Piece> pieces) {
+        return SCORE;
     }
 
     @Override

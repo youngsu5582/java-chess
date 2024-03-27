@@ -18,6 +18,7 @@ public class Knight extends Piece {
             DOWN_DOWN_RIGHT,
             LEFT_UP_LEFT,
             LEFT_DOWN_LEFT);
+    private static final double SCORE = 2.5;
 
     public Knight(final Point point, final Color color) {
         super(point, color);
@@ -33,6 +34,11 @@ public class Knight extends Piece {
                              .filter(direction -> direction.canMovePoint(this.point))
                              .map(direction -> direction.movePoint(this.point))
                              .anyMatch(movePoint::equals);
+    }
+
+    @Override
+    public double getScore(final List<Piece> pieces) {
+        return SCORE;
     }
 
     @Override

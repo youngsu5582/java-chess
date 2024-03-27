@@ -10,9 +10,16 @@ public class Queen extends Piece {
         super(point, color);
     }
 
+    private static final double SCORE = 9;
+
     @Override
     public PieceStatus getStatus() {
         return PieceStatus.QUEEN;
+    }
+
+    @Override
+    public double getScore(final List<Piece> pieces) {
+        return SCORE;
     }
 
     public boolean canMove(final Point movePoint, final List<Piece> pieceList) {
