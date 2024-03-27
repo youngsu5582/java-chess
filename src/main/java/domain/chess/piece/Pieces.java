@@ -4,7 +4,7 @@ import domain.chess.Point;
 
 import java.util.*;
 
-public class Pieces implements PieceCheckable {
+public class Pieces {
 
     private final List<Piece> value;
 
@@ -25,10 +25,6 @@ public class Pieces implements PieceCheckable {
         return value.stream()
                     .filter(piece -> piece.isEqualPoint(point))
                     .findAny();
-    }
-
-    public boolean containPieceWithPoint(final Point point) {
-        return findPieceWithPoint(point).isPresent();
     }
 
     public int size() {
