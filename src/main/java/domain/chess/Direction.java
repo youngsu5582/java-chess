@@ -40,10 +40,6 @@ public enum Direction {
         return movePointFunction.apply(point);
     }
 
-    public boolean canNotMovePoint(final Point point) {
-        return !canMovePredicate.test(point);
-    }
-
     public boolean canMovePoint(final Point point) {
         return canMovePredicate.test(point);
     }

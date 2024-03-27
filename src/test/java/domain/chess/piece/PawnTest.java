@@ -199,4 +199,34 @@ class PawnTest {
         final var result = sut.canMove(C4, List.of(new Pawn(C3, BLACK)));
         assertThat(result).isFalse();
     }
+
+    @Test
+    @DisplayName("폰은 1점을 반환한다.")
+    void pawn_return_score_1() {
+        final var sut = new Pawn(A1, WHITE);
+
+        final var result = sut.getScore(List.of());
+
+        assertThat(result).isEqualTo(1.0);
+    }
+
+    @Test
+    @DisplayName("폰은 파일이 같은 팀 폰이 있을 경우 0.5점을 반환한다.")
+    void pawn_return_score_0_5_if_has_equal_file_pawn() {
+        final var sut = new Pawn(A1, WHITE);
+
+        final var result = sut.getScore(List.of(new Pawn(A3, WHITE)));
+
+        assertThat(result).isEqualTo(0.5);
+    }
+
+    @Test
+    @DisplayName("폰은 파일이 같지만 다른 팀일 경우 , 1점을 반환한다.")
+    void pawn_return_score_1_if_has_equal_file_enemy_pawn() {
+        final var sut = new Pawn(A1, WHITE);
+
+        final var result = sut.getScore(List.of(new Pawn(A3, BLACK)));
+
+        assertThat(result).isEqualTo(1);
+    }
 }

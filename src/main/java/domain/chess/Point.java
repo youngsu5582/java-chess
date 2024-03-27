@@ -26,6 +26,10 @@ public record Point(File file, Rank rank) {
         }
     }
 
+    public boolean isEqualFile(final Point point) {
+        return point.file == this.file;
+    }
+
     public int getFileIndex() {
         return this.file.ordinal();
     }
