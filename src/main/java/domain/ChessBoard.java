@@ -30,6 +30,10 @@ public class ChessBoard {
         turn = turn.reverse();
     }
 
+    public double getScore() {
+        return pieces.getScore(turn);
+    }
+
     private void validatePoint(final Point startPoint, final Point endPoint) {
         if (startPoint.equals(endPoint)) {
             throw new IllegalArgumentException("같은 위치로 이동할 수 없습니다.");

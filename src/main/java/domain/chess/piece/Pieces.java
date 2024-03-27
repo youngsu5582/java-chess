@@ -1,5 +1,6 @@
 package domain.chess.piece;
 
+import domain.chess.Color;
 import domain.chess.Point;
 
 import java.util.*;
@@ -25,6 +26,13 @@ public class Pieces {
         return value.stream()
                     .filter(piece -> piece.isEqualPoint(point))
                     .findAny();
+    }
+
+    public double getScore(final Color color) {
+        return value.stream()
+                    .filter(piece -> piece.isEqualColor(color))
+                    .mapToDouble(piece -> piece.getScore(value))
+                    .sum();
     }
 
     public int size() {
