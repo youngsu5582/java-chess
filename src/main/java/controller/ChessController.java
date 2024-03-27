@@ -19,6 +19,7 @@ public class ChessController {
         final Map<ChessCommand, Supplier<GameStatus>> handler = new EnumMap<>(ChessCommand.class);
         handler.put(ChessCommand.START, this::gameStart);
         handler.put(ChessCommand.MOVE, this::pieceMove);
+        handler.put(ChessCommand.STATUS, this::gameStatus);
         handler.put(ChessCommand.END, this::gameEnd);
         return handler;
     }
@@ -55,6 +56,15 @@ public class ChessController {
         final var destination = InputView.inputChessPoint();
         final var routeDto = new RouteDto(source, destination);
         chessBoard.move(routeDto.getStartPoint(), routeDto.getEndPoint());
+        return GameStatus.GAME_PLAY;
+    }
+
+    private GameStatus gameStatus() {
+        if (chessBoard == null) {
+            throw new IllegalStateException("체스판이 아직 생성되지 않았습니다.");
+        }
+        final var score = chessBoard.getTurnScore();
+        OutputView.printScore(score);
         return GameStatus.GAME_PLAY;
     }
 

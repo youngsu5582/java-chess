@@ -13,6 +13,10 @@ public class OutputView {
         }
     }
 
+    public static void printScore(final double score) {
+        System.out.printf("%.2f점%n", score);
+    }
+
     public static void printException(final String exceptionMessage) {
         System.out.println(exceptionMessage);
     }

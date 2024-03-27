@@ -4,6 +4,7 @@ public enum ChessCommand {
 
     START("start"),
     END("end"),
+    STATUS("status"),
     MOVE("move");
 
     private final String commandText;
