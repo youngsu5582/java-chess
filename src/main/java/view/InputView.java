@@ -15,6 +15,11 @@ public class InputView {
         return ChessCommand.from(scanner.next());
     }
 
+    public static String inputGameId() {
+        System.out.println("게임 방 번호를 입력해주세요");
+        return scanner.next();
+    }
+
     public static String inputChessPoint() {
         return scanner.next();
     }

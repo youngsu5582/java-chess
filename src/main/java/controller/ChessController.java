@@ -2,6 +2,7 @@ package controller;
 
 import domain.ChessBoard;
 import dto.RouteDto;
+import service.ChessService;
 import util.BoardMapper;
 import view.ChessCommand;
 import view.InputView;
@@ -12,6 +13,12 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class ChessController {
+    private final ChessService chessService;
+
+    public ChessController(final ChessService chessService) {
+        this.chessService = chessService;
+    }
+
     private ChessBoard chessBoard;
     private final Map<ChessCommand, Supplier<GameStatus>> commandHandler = initializeHandler();
 
@@ -31,7 +38,6 @@ public class ChessController {
                 final ChessCommand chessCommand = InputView.inputChessCommand();
                 gameStatus = commandHandler.get(chessCommand)
                                            .get();
-                OutputView.printBoard(BoardMapper.toDto(chessBoard));
             } catch (final IllegalArgumentException | IllegalStateException exception) {
                 InputView.clear();
                 OutputView.printException(exception.getMessage());
@@ -44,7 +50,10 @@ public class ChessController {
         if (chessBoard != null) {
             throw new IllegalStateException("이미 체스판이 생성되어 있습니다.");
         }
-        chessBoard = ChessBoard.createDefaultBoard();
+        final String gameId = InputView.inputGameId();
+        
+        chessBoard = chessService.settingChessBoard(gameId);
+        OutputView.printBoard(BoardMapper.toDto(chessBoard));
         return GameStatus.GAME_START;
     }
 
@@ -55,7 +64,9 @@ public class ChessController {
         final var source = InputView.inputChessPoint();
         final var destination = InputView.inputChessPoint();
         final var routeDto = new RouteDto(source, destination);
-        chessBoard.move(routeDto.getStartPoint(), routeDto.getEndPoint());
+
+        chessService.moveChessBoard(chessBoard, routeDto);
+        OutputView.printBoard(BoardMapper.toDto(chessBoard));
         return GameStatus.GAME_PLAY;
     }
 
@@ -69,6 +80,7 @@ public class ChessController {
     }
 
     private GameStatus gameEnd() {
+        chessBoard = null;
         return GameStatus.GAME_END;
     }
 }
