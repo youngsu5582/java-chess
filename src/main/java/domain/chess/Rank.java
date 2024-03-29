@@ -3,25 +3,25 @@ package domain.chess;
 import java.util.Arrays;
 
 public enum Rank {
-    ONE(1),
-    TWO(2),
-    THREE(3),
-    FOUR(4),
-    FIVE(5),
-    SIX(6),
-    SEVEN(7),
-    EIGHT(8);
-    private final int value;
+    ONE("1"),
+    TWO("2"),
+    THREE("3"),
+    FOUR("4"),
+    FIVE("5"),
+    SIX("6"),
+    SEVEN("7"),
+    EIGHT("8");
+    private final String value;
 
-    Rank(final int value) {
+    Rank(final String value) {
         this.value = value;
     }
 
-    public static Rank from(final int value) {
+    public static Rank from(final String value) {
         return Arrays.stream(values())
-                     .filter(rank -> rank.value == value)
+                     .filter(rank -> rank.value.equals(value))
                      .findAny()
-                     .orElseThrow(() -> new IllegalArgumentException(String.format("%d는 랭크에 존재하지 않습니다.", value)));
+                     .orElseThrow(() -> new IllegalArgumentException(String.format("%s는 랭크에 존재하지 않습니다.", value)));
     }
 
     public boolean isUpEnd() {
@@ -54,4 +54,7 @@ public enum Rank {
         return ordinal() - count >= 0;
     }
 
+    public String getValue() {
+        return value;
+    }
 }

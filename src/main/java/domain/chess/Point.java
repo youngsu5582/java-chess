@@ -15,7 +15,7 @@ public record Point(File file, Rank rank) {
     public static Point from(final String value) {
         validate(value);
         final File file = File.from(value.charAt(0));
-        final Rank rank = Rank.from(Integer.parseInt(value.substring(1)));
+        final Rank rank = Rank.from(value.substring(1));
         return new Point(file, rank);
     }
 
@@ -24,6 +24,10 @@ public record Point(File file, Rank rank) {
         if (!matcher.matches()) {
             throw new IllegalArgumentException("파일은 a~h이고, 랭크는 아래부터 위로 1~8까지입니다.");
         }
+    }
+
+    public String toEntity() {
+        return this.file.getValue() + this.rank.getValue();
     }
 
     public boolean isEqualFile(final Point point) {
