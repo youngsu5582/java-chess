@@ -13,6 +13,8 @@ public interface PieceEntityRepository {
 
     boolean deletePiece(final String pieceId);
 
+    boolean deleteAllByGameId(final int gameId);
+
     boolean updatePiece(final PieceEntity pieceEntity);
 
     Optional<PieceEntity> findOneByPieceId(final String pieceId);

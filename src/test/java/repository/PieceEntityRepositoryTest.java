@@ -77,6 +77,19 @@ class PieceEntityRepositoryTest {
     }
 
     @Test
+    @DisplayName("gameId 가 같은 모든 PieceEntity 를 삭제한다")
+    void delete_all_by_gameId() {
+        final var piece1 = new Knight(A3, Color.BLACK, "id123");
+        final var piece2 = new Knight(A3, Color.BLACK, "id1234");
+
+        repository.savePieceEntity(PieceEntity.fromPiece(piece1, 5));
+        repository.savePieceEntity(PieceEntity.fromPiece(piece2, 3));
+        repository.deleteAllByGameId(3);
+
+        assertThat(repository.findAllByGameId(3)).isEmpty();
+    }
+
+    @Test
     @DisplayName("pieceId 를 통해 기물을 찾는다")
     void find_piece_by_pieceId() {
         final var piece = new Knight(A3, Color.BLACK, "id123");
