@@ -12,16 +12,48 @@ public abstract class Piece implements Movable {
 
     protected Point point;
     protected final Color color;
+    private final String pieceId;
+
+    protected Piece(final Point point, final Color color, final String pieceId) {
+        this.point = point;
+        this.color = color;
+        this.pieceId = pieceId;
+    }
 
     protected Piece(final Point point, final Color color) {
         this.point = point;
         this.color = color;
+        this.pieceId = PieceIdGenerator.generate();
+    }
+
+    public static Piece newInstance(final PieceStatus pieceStatus, final Point point, final Color color, final String pieceId) {
+        return switch (pieceStatus) {
+            case KING -> new King(point, color, pieceId);
+            case PAWN -> new Pawn(point, color, pieceId);
+            case ROOK -> new Rook(point, color, pieceId);
+            case QUEEN -> new Queen(point, color, pieceId);
+            case BISHOP -> new Bishop(point, color, pieceId);
+            case KNIGHT -> new Knight(point, color, pieceId);
+        };
     }
 
     public abstract PieceStatus getStatus();
 
     public void move(final Point point) {
         this.point = point;
+    }
+
+    public String toPointEntity() {
+        return this.point.toEntity();
+    }
+
+    public String toColorEntity() {
+        return this.color.getValue();
+    }
+
+    public String toKindEntity() {
+        return this.getStatus()
+                   .getName();
     }
 
     public boolean canMove(final Point movePoint) {
@@ -82,6 +114,10 @@ public abstract class Piece implements Movable {
 
     public Point getPoint() {
         return this.point;
+    }
+
+    public String getPieceId() {
+        return pieceId;
     }
 
     @Override

@@ -12,6 +12,10 @@ public class King extends Piece {
         super(point, color);
     }
 
+    public King(final Point point, final Color color, final String pieceId) {
+        super(point, color, pieceId);
+    }
+
     @Override
     public PieceStatus getStatus() {
         return PieceStatus.KING;

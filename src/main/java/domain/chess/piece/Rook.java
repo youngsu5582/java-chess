@@ -17,6 +17,10 @@ public class Rook extends Piece {
         super(point, color);
     }
 
+    public Rook(final Point point, final Color color, final String pieceId) {
+        super(point, color, pieceId);
+    }
+
     @Override
     public double getScore(final List<Piece> pieces) {
         return SCORE;

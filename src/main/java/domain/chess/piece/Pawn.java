@@ -22,6 +22,10 @@ public class Pawn extends Piece {
         super(point, color);
     }
 
+    public Pawn(final Point point, final Color color, final String pieceId) {
+        super(point, color, pieceId);
+    }
+
     public boolean canMove(final Point movePoint, final List<Piece> piecesList) {
         final PieceChecker checker = new PieceChecker(piecesList);
         return canMovePoint(movePoint, checker) || canMovePointWithAttack(movePoint, checker);

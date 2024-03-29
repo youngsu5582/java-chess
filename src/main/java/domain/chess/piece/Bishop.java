@@ -16,6 +16,10 @@ public class Bishop extends Piece {
         super(point, color);
     }
 
+    public Bishop(final Point point, final Color color, final String pieceId) {
+        super(point, color, pieceId);
+    }
+
     @Override
     public PieceStatus getStatus() {
         return PieceStatus.BISHOP;

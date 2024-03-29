@@ -24,6 +24,9 @@ public class Knight extends Piece {
         super(point, color);
     }
 
+    public Knight(final Point point, final Color color, final String pieceId) {
+        super(point, color, pieceId);
+    }
 
     public boolean canMove(final Point movePoint, final List<Piece> pieceList) {
         return canMovePoint(movePoint) && hasEnemyPieceOrEmpty(movePoint, new PieceChecker(pieceList));
