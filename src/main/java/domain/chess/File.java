@@ -54,4 +54,7 @@ public enum File {
         return ordinal() + count < values().length;
     }
 
+    public char getValue() {
+        return value;
+    }
 }
