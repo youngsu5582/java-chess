@@ -23,7 +23,7 @@ class ChessBoardTest {
         final List<Piece> pieceList = List.of(new King(point1, color1), new King(point2, color2));
         final var pieces = new Pieces(pieceList);
 
-        final var sut = new ChessBoard(pieces);
+        final var sut = new ChessBoard(pieces, 5);
 
         assertThat(sut).isInstanceOf(ChessBoard.class);
     }
@@ -34,7 +34,7 @@ class ChessBoardTest {
         final List<Piece> pieceList = List.of(new King(C1, Color.BLACK), new Bishop(D1, Color.WHITE));
         final var pieces = new Pieces(pieceList);
 
-        assertThatThrownBy(() -> new ChessBoard(pieces))
+        assertThatThrownBy(() -> new ChessBoard(pieces, 3))
                 .isInstanceOf(IllegalStateException.class);
     }
 
@@ -48,7 +48,7 @@ class ChessBoardTest {
                 new King(C5, Color.WHITE));
 
         final var pieces = new Pieces(pieceList);
-        final var sut = new ChessBoard(pieces);
+        final var sut = new ChessBoard(pieces, 3);
 
         assertThatThrownBy(() -> sut.move(D4, D5))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -62,7 +62,7 @@ class ChessBoardTest {
                 new King(C1, Color.BLACK),
                 new King(C5, Color.WHITE));
 
-        final var sut = new ChessBoard(new Pieces(pieceList), Color.WHITE);
+        final var sut = new ChessBoard(new Pieces(pieceList), Color.WHITE, 5);
 
         assertThatThrownBy(() -> sut.move(C3, C4))
                 .isInstanceOf(IllegalArgumentException.class)

@@ -18,14 +18,14 @@ public class ChessBoardGenerator {
         throw new UnsupportedOperationException("생성할 수 없습니다");
     }
 
-    public static ChessBoard createDefaultBoard() {
+    public static ChessBoard createDefaultBoard(final int gameId) {
         final ArrayList<Piece> list = new ArrayList<>();
         list.addAll(selectPiece(Rank.EIGHT, Color.BLACK));
         list.addAll(selectPawn(Rank.SEVEN, Color.BLACK));
 
         list.addAll(selectPawn(Rank.TWO, Color.WHITE));
         list.addAll(selectPiece(Rank.ONE, Color.WHITE));
-        return new ChessBoard(new Pieces(list), Color.WHITE);
+        return new ChessBoard(new Pieces(list), Color.WHITE, gameId);
     }
 
     private static List<Piece> selectPawn(final Rank rank, final Color color) {

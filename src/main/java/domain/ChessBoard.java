@@ -13,15 +13,17 @@ import java.util.Optional;
 public class ChessBoard {
     private final Pieces pieces;
     private Color turn;
+    private final int gameId;
 
-    public ChessBoard(final Pieces pieces) {
-        this(pieces, Color.WHITE);
+    public ChessBoard(final Pieces pieces, final int gameId) {
+        this(pieces, Color.WHITE, gameId);
     }
 
-    public ChessBoard(final Pieces pieces, final Color color) {
+    public ChessBoard(final Pieces pieces, final Color color, final int gameId) {
         validatePieces(pieces);
         this.pieces = pieces;
         this.turn = color;
+        this.gameId = gameId;
     }
 
     private void validatePieces(final Pieces pieces) {
@@ -35,12 +37,17 @@ public class ChessBoard {
         }
     }
 
+    public Optional<Piece> findPiece(final Point point) {
+        return this.pieces.findPieceWithPoint(point);
+    }
 
-    public void move(final Point startPoint, final Point endPoint) {
+    public Piece move(final Point startPoint, final Point endPoint) {
         validatePoint(startPoint, endPoint);
-        this.pieces.findPieceWithPoint(startPoint)
-                   .ifPresent(piece -> pieces.move(piece, endPoint));
+        final Optional<Piece> optionalPiece = this.pieces.findPieceWithPoint(startPoint);
+        final Piece piece = optionalPiece.get();
+        pieces.move(piece, endPoint);
         turn = turn.reverse();
+        return piece;
     }
 
     public double getTurnScore() {
@@ -72,11 +79,15 @@ public class ChessBoard {
         throw new IllegalArgumentException(String.format("현재는 %s의 차례입니다.", turn));
     }
 
-    public static ChessBoard createDefaultBoard() {
-        return ChessBoardGenerator.createDefaultBoard();
+    public static ChessBoard createDefaultBoard(final int gameId) {
+        return ChessBoardGenerator.createDefaultBoard(gameId);
     }
 
     public List<Piece> getPieces() {
         return this.pieces.allPieces();
+    }
+
+    public int getGameId() {
+        return gameId;
     }
 }
