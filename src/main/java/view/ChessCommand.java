@@ -21,4 +21,8 @@ public enum ChessCommand {
         }
         throw new IllegalArgumentException(String.format("%s는 없는 명령입니다.", commandText));
     }
+
+    public String getCommandText() {
+        return commandText;
+    }
 }

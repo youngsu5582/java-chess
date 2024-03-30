@@ -1,6 +1,6 @@
 package controller;
 
-import domain.ChessBoard;
+import domain.chess.piece.CheckMateException;
 import dto.RouteDto;
 import service.ChessService;
 import util.BoardMapper;
@@ -14,12 +14,13 @@ import java.util.function.Supplier;
 
 public class ChessController {
     private final ChessService chessService;
+    private Integer gameId;
 
     public ChessController(final ChessService chessService) {
         this.chessService = chessService;
+        this.gameId = null;
     }
 
-    private ChessBoard chessBoard;
     private final Map<ChessCommand, Supplier<GameStatus>> commandHandler = initializeHandler();
 
     private Map<ChessCommand, Supplier<GameStatus>> initializeHandler() {
@@ -38,7 +39,10 @@ public class ChessController {
                 final ChessCommand chessCommand = InputView.inputChessCommand();
                 gameStatus = commandHandler.get(chessCommand)
                                            .get();
-            } catch (final IllegalArgumentException | IllegalStateException exception) {
+            } catch (final IllegalArgumentException | IllegalStateException | CheckMateException exception) {
+                if (exception instanceof CheckMateException) {
+                    gameId = null;
+                }
                 InputView.clear();
                 OutputView.printException(exception.getMessage());
             }
@@ -47,40 +51,45 @@ public class ChessController {
 
 
     private GameStatus gameStart() {
-        if (chessBoard != null) {
-            throw new IllegalStateException("이미 체스판이 생성되어 있습니다.");
-        }
-        final String gameId = InputView.inputGameId();
-        
-        chessBoard = chessService.settingChessBoard(gameId);
+        checkCacheExist();
+        gameId = Integer.parseInt(InputView.inputGameId());
+        final var chessBoard = chessService.settingChessBoard(gameId);
         OutputView.printBoard(BoardMapper.toDto(chessBoard));
         return GameStatus.GAME_START;
     }
 
     private GameStatus pieceMove() {
-        if (chessBoard == null) {
-            throw new IllegalStateException("체스판이 아직 생성되지 않았습니다.");
-        }
+        checkCache();
         final var source = InputView.inputChessPoint();
         final var destination = InputView.inputChessPoint();
         final var routeDto = new RouteDto(source, destination);
 
-        chessService.moveChessBoard(chessBoard, routeDto);
+        final var chessBoard = chessService.moveChessBoard(gameId, routeDto);
         OutputView.printBoard(BoardMapper.toDto(chessBoard));
         return GameStatus.GAME_PLAY;
     }
 
     private GameStatus gameStatus() {
-        if (chessBoard == null) {
-            throw new IllegalStateException("체스판이 아직 생성되지 않았습니다.");
-        }
-        final var score = chessBoard.getTurnScore();
+        checkCache();
+        final var score = chessService.getChessScore(gameId);
         OutputView.printScore(score);
         return GameStatus.GAME_PLAY;
     }
 
     private GameStatus gameEnd() {
-        chessBoard = null;
+        gameId = null;
         return GameStatus.GAME_END;
+    }
+
+    private void checkCache() {
+        if (gameId == null) {
+            throw new IllegalStateException(String.format("%s를 입력후 방 번호를 입력해주세요", ChessCommand.START.getCommandText()));
+        }
+    }
+
+    private void checkCacheExist() {
+        if (gameId != null) {
+            throw new IllegalStateException(String.format("이미 방 번호(%d)가 있습니다", gameId));
+        }
     }
 }
