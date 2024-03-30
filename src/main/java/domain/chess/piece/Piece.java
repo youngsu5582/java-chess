@@ -110,6 +110,10 @@ public abstract class Piece implements Movable {
         return this.color.isWhite();
     }
 
+    public boolean isKing() {
+        return false;
+    }
+
     public abstract double getScore(List<Piece> pieces);
 
     public Point getPoint() {
