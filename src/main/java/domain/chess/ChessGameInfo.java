@@ -7,7 +7,9 @@ import java.util.function.BiFunction;
 public record ChessGameInfo(int chessGameId, Color color) {
     public static ChessGameInfo valueOf(final int chessGameId, final Color color) {
         final String key = makeKey(chessGameId, color);
-        CACHE.computeIfAbsent(key, k -> CACHE.put(k, new ChessGameInfo(chessGameId, color)));
+        if (!CACHE.containsKey(key)) {
+            CACHE.put(key, new ChessGameInfo(chessGameId, color));
+        }
         return CACHE.get(key);
     }
 

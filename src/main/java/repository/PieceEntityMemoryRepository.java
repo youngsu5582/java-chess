@@ -41,12 +41,10 @@ public class PieceEntityMemoryRepository implements PieceEntityRepository {
 
     @Override
     public boolean deleteAllByGameId(final int gameId) {
-        for (final var entrySet : map.entrySet()) {
-            if (entrySet.getValue()
-                        .gameId() == gameId) {
-                map.remove(entrySet.getKey());
-            }
-        }
+        final List<PieceEntity> entities = findAllByGameId(gameId);
+        entities.stream()
+                .map(PieceEntity::pieceId)
+                .forEach(map::remove);
         return true;
     }
 
