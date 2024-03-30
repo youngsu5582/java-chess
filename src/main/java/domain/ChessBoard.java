@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class ChessBoard {
     private final Pieces pieces;
-    private Color turn;
+    private final Color turn;
     private final int gameId;
 
     public ChessBoard(final Pieces pieces, final int gameId) {
@@ -46,12 +46,7 @@ public class ChessBoard {
         final Optional<Piece> optionalPiece = this.pieces.findPieceWithPoint(startPoint);
         final Piece piece = optionalPiece.get();
         pieces.move(piece, endPoint);
-        turn = turn.reverse();
         return piece;
-    }
-
-    public double getTurnScore() {
-        return pieces.getScore(turn);
     }
 
     private void validatePoint(final Point startPoint, final Point endPoint) {
@@ -70,10 +65,7 @@ public class ChessBoard {
     }
 
     private void validateDifferentColor(final Piece piece) {
-        if (piece.isBlack() && turn.isBlack()) {
-            return;
-        }
-        if (piece.isWhite() && turn.isWhite()) {
+        if (piece.isEqualColor(turn)) {
             return;
         }
         throw new IllegalArgumentException(String.format("현재는 %s의 차례입니다.", turn));
@@ -81,6 +73,14 @@ public class ChessBoard {
 
     public static ChessBoard createDefaultBoard(final int gameId) {
         return ChessBoardGenerator.createDefaultBoard(gameId);
+    }
+
+    public Color getTurn() {
+        return turn;
+    }
+
+    public double getTurnScore() {
+        return pieces.getScore(turn);
     }
 
     public List<Piece> getPieces() {
