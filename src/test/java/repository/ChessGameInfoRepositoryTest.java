@@ -24,7 +24,7 @@ class ChessGameInfoRepositoryTest {
     void create() {
         final ChessGameInfoRepository repository = new ChessGameInfoMemoryRepository();
 
-        final var gameInfo = repository.create(new ChessGameInfo(1, Color.BLACK));
+        final var gameInfo = repository.create(ChessGameInfo.valueOf(1, Color.BLACK));
 
         assertThat(gameInfo).isTrue();
     }
@@ -33,9 +33,9 @@ class ChessGameInfoRepositoryTest {
     @DisplayName("체스 게임 정보 생성에 실패하면 거짓을 반환한다")
     void create1() {
         final ChessGameInfoRepository repository = new ChessGameInfoMemoryRepository();
-        repository.create(new ChessGameInfo(1, Color.BLACK));
+        repository.create(ChessGameInfo.valueOf(1, Color.BLACK));
 
-        final var gameInfo = repository.create(new ChessGameInfo(1, Color.BLACK));
+        final var gameInfo = repository.create(ChessGameInfo.valueOf(1, Color.BLACK));
 
         assertThat(gameInfo).isFalse();
     }
@@ -44,18 +44,18 @@ class ChessGameInfoRepositoryTest {
     @DisplayName("게임 아이디에 해당하는 정보가 있으면 반환한다")
     void some2() {
         final ChessGameInfoRepository repository = new ChessGameInfoMemoryRepository();
-        repository.create(new ChessGameInfo(1, Color.BLACK));
+        repository.create(ChessGameInfo.valueOf(1, Color.BLACK));
 
         final var gameInfo = repository.getChessGameInfoWithGameId(1);
 
-        assertThat(gameInfo.get()).isEqualTo(new ChessGameInfo(1, Color.BLACK));
+        assertThat(gameInfo).contains(ChessGameInfo.valueOf(1, Color.BLACK));
     }
 
     @Test
     @DisplayName("게임 아이디에 해당하는 정보에서 차례 교체를 성공하면 참을 반환한다")
     void some1() {
         final ChessGameInfoRepository repository = new ChessGameInfoMemoryRepository();
-        repository.create(new ChessGameInfo(1, Color.BLACK));
+        repository.create(ChessGameInfo.valueOf(1, Color.BLACK));
         final var gameInfo = repository.getChessGameInfoWithGameId(1)
                                        .get();
         repository.changeTurn(gameInfo);

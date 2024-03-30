@@ -18,9 +18,8 @@ public class ChessGameInfoMemoryRepository implements ChessGameInfoRepository {
     @Override
 
     public boolean changeTurn(final ChessGameInfo chessGameInfo) {
-        final int chessGameId = chessGameInfo.chessGameId();
         if (map.containsKey(chessGameInfo.chessGameId())) {
-            map.put(chessGameInfo.chessGameId(), new ChessGameInfo(chessGameId, chessGameInfo.getReverseColor()));
+            map.put(chessGameInfo.chessGameId(), chessGameInfo.reverseColor());
             return true;
         }
         return false;
