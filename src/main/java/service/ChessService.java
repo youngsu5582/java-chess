@@ -2,12 +2,12 @@ package service;
 
 import domain.ChessBoard;
 import domain.chess.ChessGameInfo;
+import domain.chess.piece.CheckMateException;
+import domain.chess.piece.Piece;
 import domain.chess.piece.PieceEntity;
 import domain.chess.piece.Pieces;
 import dto.RouteDto;
-import repository.ChessGameInfoMemoryRepository;
 import repository.ChessGameInfoRepository;
-import repository.PieceEntityMemoryRepository;
 import repository.PieceEntityRepository;
 
 import java.util.List;
@@ -21,26 +21,26 @@ public class ChessService {
         this.chessGameInfoRepository = chessGameInfoRepository;
     }
 
-    public ChessService() {
-        this.pieceEntityRepository = new PieceEntityMemoryRepository();
-        this.chessGameInfoRepository = new ChessGameInfoMemoryRepository();
-    }
-
-    public ChessBoard settingChessBoard(final String gameId) {
-        final Integer id = Integer.parseInt(gameId);
-
-        final var chessGameInfo = this.chessGameInfoRepository.getChessGameInfoWithGameId(id);
+    public ChessBoard settingChessBoard(final int gameId) {
+        final var chessGameInfo = this.chessGameInfoRepository.getChessGameInfoWithGameId(gameId);
         if (chessGameInfo.isPresent()) {
-            return createExistChessBoard(id);
+            return getExistChessBoard(chessGameInfo.get());
         }
-        return createNewChessBoard(id);
+        return createNewChessBoard(gameId);
     }
 
-    private ChessBoard createExistChessBoard(final int gameId) {
-        final List<PieceEntity> pieceEntities = this.pieceEntityRepository.findAllByGameId(gameId);
+    private ChessBoard getExistChessBoard(final int gameId) {
+        final var chessGameInfo = this.chessGameInfoRepository
+                .getChessGameInfoWithGameId(gameId)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("%d 는 없는 아이디입니다", gameId)));
+        return getExistChessBoard(chessGameInfo);
+    }
+
+    private ChessBoard getExistChessBoard(final ChessGameInfo chessGameInfo) {
+        final List<PieceEntity> pieceEntities = this.pieceEntityRepository.findAllByGameId(chessGameInfo.chessGameId());
         return new ChessBoard(new Pieces(pieceEntities.stream()
                                                       .map(PieceEntity::toPiece)
-                                                      .toList()), gameId);
+                                                      .toList()), chessGameInfo.color(), chessGameInfo.chessGameId());
     }
 
     private ChessBoard createNewChessBoard(final int gameId) {
@@ -54,12 +54,34 @@ public class ChessService {
     }
 
 
-    public void moveChessBoard(final ChessBoard chessBoard, final RouteDto routeDto) {
-        final var cs = chessBoard.findPiece(routeDto.getEndPoint());
+    public ChessBoard moveChessBoard(final int gameId, final RouteDto routeDto) {
+        final var chessBoard = getExistChessBoard(gameId);
+        final var optionalPiece = chessBoard.findPiece(routeDto.getEndPoint());
+
         final var piece = chessBoard.move(routeDto.getStartPoint(), routeDto.getEndPoint());
-        if (cs.isPresent()) {
-            this.pieceEntityRepository.deletePiece(piece.getPieceId());
+        optionalPiece.ifPresent(endPointPiece -> processDelete(chessBoard, endPointPiece));
+
+        processMove(chessBoard, piece);
+        return chessBoard;
+    }
+
+    private void processDelete(final ChessBoard chessBoard, final Piece piece) {
+        if (piece.isKing()) {
+            final int gameId = chessBoard.getGameId();
+            this.pieceEntityRepository.deleteAllByGameId(gameId);
+            this.chessGameInfoRepository.deleteGameInfo(gameId);
+            throw new CheckMateException(chessBoard.getTurn()
+                                                   .getValue());
         }
+        this.pieceEntityRepository.deletePiece(piece.getPieceId());
+    }
+
+    private void processMove(final ChessBoard chessBoard, final Piece piece) {
         this.pieceEntityRepository.updatePiece(PieceEntity.fromPiece(piece, chessBoard.getGameId()));
+        this.chessGameInfoRepository.changeTurn(ChessGameInfo.valueOf(chessBoard.getGameId(), chessBoard.getTurn()));
+    }
+
+    public double getChessScore(final int gameId) {
+        return getExistChessBoard(gameId).getTurnScore();
     }
 }
