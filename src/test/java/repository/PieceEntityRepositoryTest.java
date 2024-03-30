@@ -16,7 +16,7 @@ class PieceEntityRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        this.repository = new PieceEntityMemoryRepository();
+        this.repository = new PieceEntitySqlRepository(new ConnectionGenerator());
     }
 
 
@@ -25,7 +25,7 @@ class PieceEntityRepositoryTest {
     void true_if_create_piece_entity() {
 
         final var piece1 = new Knight(A3, Color.BLACK);
-        final var pieceEntity1 = PieceEntity.fromPiece(piece1, 3);
+        final var pieceEntity1 = PieceEntity.fromPiece(piece1, 5);
 
         final var result = repository.savePieceEntity(pieceEntity1);
 
@@ -52,12 +52,12 @@ class PieceEntityRepositoryTest {
     @DisplayName("pieceId 를 통해 기물 삭제를 성공하면 참을 반환한다")
     void true_if_delete_piece_entity() {
         final var repository = new PieceEntityMemoryRepository();
-        final var piece = new Knight(A3, Color.BLACK, "12");
+        final var piece = new Knight(A3, Color.BLACK, "1245");
 
         final var pieceEntity1 = PieceEntity.fromPiece(piece, 3);
         repository.savePieceEntity(pieceEntity1);
 
-        final var result = repository.deletePiece("12");
+        final var result = repository.deletePiece("1245");
 
         assertThat(result).isTrue();
     }
@@ -65,13 +65,12 @@ class PieceEntityRepositoryTest {
     @Test
     @DisplayName("없는 pieceId 를 통해 삭제하려면 거짓을 반환한다")
     void false_if_delete_not_exist_pieceId() {
-        final var repository = new PieceEntityMemoryRepository();
-        final var piece1 = new Knight(A3, Color.BLACK, "123");
+        final var piece1 = new Knight(A3, Color.BLACK, "123existId");
 
         final var pieceEntity1 = PieceEntity.fromPiece(piece1, 5);
         repository.savePieceEntity(pieceEntity1);
 
-        final var result = repository.deletePiece("1234");
+        final var result = repository.deletePiece("1234xxId");
 
         assertThat(result).isFalse();
     }
@@ -92,12 +91,12 @@ class PieceEntityRepositoryTest {
     @Test
     @DisplayName("pieceId 를 통해 기물을 찾는다")
     void find_piece_by_pieceId() {
-        final var piece = new Knight(A3, Color.BLACK, "id123");
+        final var piece = new Knight(A3, Color.BLACK, "idFind123");
 
         final var pieceEntity1 = PieceEntity.fromPiece(piece, 5);
         repository.savePieceEntity(pieceEntity1);
 
-        final var result = repository.findOneByPieceId("id123");
+        final var result = repository.findOneByPieceId("idFind123");
 
         assertThat(result).contains(PieceEntity.fromPiece(piece, 5));
     }
@@ -118,13 +117,13 @@ class PieceEntityRepositoryTest {
     @Test
     @DisplayName("업데이트에 성공하면 참을 반환다")
     void true_if_update_piece_entity() {
-        final var piece = new Knight(A3, Color.BLACK, "13");
+        final var piece = new Knight(A3, Color.BLACK, "13updateId");
         savePiece(piece, 5);
         piece.move(A5);
 
         final var result = repository.updatePiece(PieceEntity.fromPiece(piece, 5));
-        final var findEntity = repository.findOneByPieceId("13");
-
+        final var findEntity = repository.findOneByPieceId("13updateId");
+        System.out.println(findEntity);
         assertThat(result).isTrue();
         assertThat(findEntity.get()
                              .point()).isEqualTo("a5");

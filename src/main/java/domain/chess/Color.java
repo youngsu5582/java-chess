@@ -3,8 +3,8 @@ package domain.chess;
 import java.util.Arrays;
 
 public enum Color {
-    BLACK("BLACK"),
-    WHITE("WHITE");
+    BLACK("black"),
+    WHITE("white");
     private final String value;
 
     Color(final String value) {
@@ -30,11 +30,11 @@ public enum Color {
         return this.value;
     }
 
-    public static final Color from(final String name) {
+    public static final Color from(final String value) {
         return Arrays.stream(values())
                      .filter(color -> color.getValue()
-                                           .equals(name))
+                                           .equals(value))
                      .findFirst()
-                     .orElseThrow(() -> new IllegalArgumentException(String.format("%s 은 Color 에 없습니다", name)));
+                     .orElseThrow(() -> new IllegalArgumentException(String.format("%s 은 Color 에 없습니다", value)));
     }
 }
