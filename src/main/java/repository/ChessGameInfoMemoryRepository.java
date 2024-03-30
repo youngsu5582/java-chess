@@ -19,7 +19,7 @@ public class ChessGameInfoMemoryRepository implements ChessGameInfoRepository {
 
     public boolean changeTurn(final ChessGameInfo chessGameInfo) {
         if (map.containsKey(chessGameInfo.chessGameId())) {
-            map.put(chessGameInfo.chessGameId(), chessGameInfo.reverseColor());
+            map.put(chessGameInfo.chessGameId(), chessGameInfo);
             return true;
         }
         return false;
@@ -37,7 +37,7 @@ public class ChessGameInfoMemoryRepository implements ChessGameInfoRepository {
     @Override
     public boolean create(final ChessGameInfo chessGameInfo) {
         if (map.containsKey(chessGameInfo.chessGameId())) {
-            return false;
+            throw new IllegalStateException();
         }
         map.put(chessGameInfo.chessGameId(), chessGameInfo);
         return true;

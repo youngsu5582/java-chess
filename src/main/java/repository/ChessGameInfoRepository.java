@@ -11,5 +11,5 @@ public interface ChessGameInfoRepository {
 
     Optional<ChessGameInfo> getChessGameInfoWithGameId(final int gameId);
 
-    boolean create(ChessGameInfo chessGameInfo);
+    boolean create(ChessGameInfo chessGameInfo) throws IllegalStateException;
 }
