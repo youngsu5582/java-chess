@@ -23,11 +23,9 @@ public class ChessService {
     }
 
     public ChessBoard settingChessBoard(final int gameId) {
-        final var chessGameInfo = this.chessGameInfoRepository.getChessGameInfoWithGameId(gameId);
-        if (chessGameInfo.isPresent()) {
-            return getExistChessBoard(chessGameInfo.get());
-        }
-        return createNewChessBoard(gameId);
+        return this.chessGameInfoRepository.getChessGameInfoWithGameId(gameId)
+                                           .map(this::getExistChessBoard)
+                                           .orElseGet(() -> createNewChessBoard(gameId));
     }
 
     private ChessBoard getExistChessBoard(final int gameId) {
@@ -39,9 +37,10 @@ public class ChessService {
 
     private ChessBoard getExistChessBoard(final ChessGameInfoEntity chessGameInfoEntity) {
         final List<PieceEntity> pieceEntities = this.pieceEntityRepository.findAllByGameId(chessGameInfoEntity.chessGameId());
-        return new ChessBoard(new Pieces(pieceEntities.stream()
+        final Pieces pieces = new Pieces(pieceEntities.stream()
                                                       .map(PieceEntity::toPiece)
-                                                      .toList()), chessGameInfoEntity.color(), chessGameInfoEntity.chessGameId());
+                                                      .toList());
+        return new ChessBoard(pieces, chessGameInfoEntity.color(), chessGameInfoEntity.chessGameId());
     }
 
     private ChessBoard createNewChessBoard(final int gameId) {

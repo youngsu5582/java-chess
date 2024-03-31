@@ -23,24 +23,19 @@ public class PieceChecker implements PieceCheckable {
         return findPieceWithPoint(point).isPresent();
     }
 
-    @Override
-    public boolean isNotEqualColorInPoint(final Color color, final Point point) {
-        final Optional<Piece> optionalPiece = this.findPieceWithPoint(point);
-        if (optionalPiece.isEmpty()) {
-            return false;
-        }
-        final Piece toPiece = optionalPiece.get();
-        return !toPiece.isEqualColor(color);
-    }
 
     @Override
     public boolean isEqualColorInPoint(final Color color, final Point point) {
-        final Optional<Piece> optionalPiece = this.findPieceWithPoint(point);
-        if (optionalPiece.isEmpty()) {
-            return false;
-        }
-        final Piece toPiece = optionalPiece.get();
-        return toPiece.isEqualColor(color);
+        return this.findPieceWithPoint(point)
+                   .filter(piece -> piece.isEqualColor(color))
+                   .isPresent();
+    }
+
+    @Override
+    public boolean isNotEqualColorInPoint(final Color color, final Point point) {
+        return this.findPieceWithPoint(point)
+                   .filter(piece -> !piece.isEqualColor(color))
+                   .isPresent();
     }
 
     @Override
@@ -54,13 +49,11 @@ public class PieceChecker implements PieceCheckable {
         final Direction direction = startPoint.calculate(endPoint);
         final Point pathPoint = direction.movePoint(startPoint);
 
-        final Stream<Point> pathPoints = Stream.iterate(
-                pathPoint,
-                movePoint -> direction.canMoveOnePoint(movePoint) && movePoint.notEquals(endPoint),
-                direction::movePoint);
-
-        return pathPoints
-                .anyMatch(this::containPieceWithPoint);
+        return Stream.iterate(
+                             pathPoint,
+                             movePoint -> direction.canMoveOnePoint(movePoint) && movePoint.notEquals(endPoint),
+                             direction::movePoint)
+                     .anyMatch(this::containPieceWithPoint);
     }
 
 }
