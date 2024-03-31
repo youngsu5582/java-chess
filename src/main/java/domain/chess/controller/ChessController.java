@@ -41,7 +41,7 @@ public class ChessController {
                                            .get();
             } catch (final IllegalArgumentException | IllegalStateException | GameEndException exception) {
                 if (exception instanceof GameEndException) {
-                    gameId = null;
+                    initializeCache();
                 }
                 InputView.clear();
                 OutputView.printException(exception.getMessage());
@@ -91,5 +91,8 @@ public class ChessController {
         if (gameId != null) {
             throw new IllegalStateException(String.format("이미 방 번호(%d)가 있습니다", gameId));
         }
+    }
+    private void initializeCache(){
+        gameId = null;
     }
 }
