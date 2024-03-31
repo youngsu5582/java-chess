@@ -37,7 +37,7 @@ public class Knight extends Piece {
 
     private boolean canMovePoint(final Point movePoint) {
         return DIRECTION_LIST.stream()
-                             .filter(direction -> direction.canMovePoint(this.point))
+                             .filter(direction -> direction.canMoveOnePoint(this.point))
                              .map(direction -> direction.movePoint(this.point))
                              .anyMatch(movePoint::equals);
     }

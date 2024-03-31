@@ -56,7 +56,7 @@ public class PieceChecker implements PieceCheckable {
 
         final Stream<Point> pathPoints = Stream.iterate(
                 pathPoint,
-                movePoint -> direction.canMovePoint(movePoint) && movePoint.notEquals(endPoint),
+                movePoint -> direction.canMoveOnePoint(movePoint) && movePoint.notEquals(endPoint),
                 direction::movePoint);
 
         return pathPoints

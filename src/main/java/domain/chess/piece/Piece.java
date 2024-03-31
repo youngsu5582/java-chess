@@ -61,7 +61,7 @@ public abstract class Piece implements Movable {
 
     protected boolean canMovePointOne(final Point movePoint) {
         final Direction direction = this.point.calculate(movePoint);
-        if (direction.canMovePoint(this.point)) {
+        if (direction.canMoveOnePoint(this.point)) {
             return direction.movePoint(this.point)
                             .equals(movePoint);
         }
