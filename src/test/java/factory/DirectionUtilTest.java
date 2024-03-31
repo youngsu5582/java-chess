@@ -1,10 +1,10 @@
 package factory;
 
-import domain.chess.Direction;
-import domain.chess.Point;
+import domain.chess.piece.Direction;
+import domain.chess.piece.Point;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import domain.chess.DirectionUtil;
+import domain.chess.util.DirectionUtil;
 
 import static fixture.PointFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;

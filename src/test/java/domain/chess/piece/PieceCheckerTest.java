@@ -1,6 +1,7 @@
 package domain.chess.piece;
 
-import domain.chess.Color;
+import domain.chess.piece.kind.King;
+import domain.chess.piece.kind.Knight;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

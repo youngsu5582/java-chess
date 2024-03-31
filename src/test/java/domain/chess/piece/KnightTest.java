@@ -1,14 +1,15 @@
 package domain.chess.piece;
 
 
-import domain.chess.Color;
+import domain.chess.piece.kind.Knight;
+import domain.chess.piece.kind.Queen;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static domain.chess.Color.BLACK;
-import static domain.chess.Color.WHITE;
+import static domain.chess.piece.Color.BLACK;
+import static domain.chess.piece.Color.WHITE;
 import static fixture.PointFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 

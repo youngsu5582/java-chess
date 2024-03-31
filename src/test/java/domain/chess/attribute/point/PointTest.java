@@ -1,8 +1,8 @@
 package domain.chess.attribute.point;
 
-import domain.chess.File;
-import domain.chess.Point;
-import domain.chess.Rank;
+import domain.chess.piece.File;
+import domain.chess.piece.Point;
+import domain.chess.piece.Rank;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

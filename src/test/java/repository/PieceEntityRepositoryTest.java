@@ -1,9 +1,11 @@
 package repository;
 
-import domain.chess.Color;
-import domain.chess.piece.Knight;
+import domain.chess.piece.Color;
+import domain.chess.piece.kind.Knight;
 import domain.chess.piece.Piece;
-import domain.chess.piece.PieceEntity;
+import domain.chess.entity.PieceEntity;
+import domain.chess.repository.PieceEntityRepository;
+import fake.PieceEntityMemoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,7 @@ class PieceEntityRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        this.repository = new PieceEntitySqlRepository(new ConnectionGenerator());
+        this.repository = new PieceEntityMemoryRepository();
     }
 
 

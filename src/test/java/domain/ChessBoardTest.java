@@ -1,9 +1,13 @@
 package domain;
 
+import domain.chess.ChessBoard;
 import domain.chess.piece.*;
+import domain.chess.piece.kind.Bishop;
+import domain.chess.piece.kind.King;
+import domain.chess.piece.kind.Pawn;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import domain.chess.Color;
+import domain.chess.piece.Color;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package domain.chess.attribute.point;
 
-import domain.chess.Direction;
-import domain.chess.Point;
+import domain.chess.piece.Direction;
+import domain.chess.piece.Point;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,7 +12,7 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static domain.chess.Direction.*;
+import static domain.chess.piece.Direction.*;
 import static fixture.PointFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;

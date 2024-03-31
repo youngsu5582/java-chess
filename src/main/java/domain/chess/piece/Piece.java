@@ -1,8 +1,7 @@
 package domain.chess.piece;
 
-import domain.chess.Color;
-import domain.chess.Direction;
-import domain.chess.Point;
+import domain.chess.piece.kind.*;
+import domain.chess.util.PieceIdGenerator;
 
 import java.util.Arrays;
 import java.util.List;

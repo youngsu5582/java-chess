@@ -1,9 +1,5 @@
 package domain.chess.piece;
 
-import domain.chess.Color;
-import domain.chess.Direction;
-import domain.chess.Point;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
