@@ -7,24 +7,23 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 public record ChessGameInfoEntity(int chessGameId, Color color) {
+    private static final BiFunction<Integer, String, String> MAKE_KEY_FUNCTION
+            = (gameId, colorValue) -> gameId + colorValue;
+    private static final Map<String, ChessGameInfoEntity> CACHE = new HashMap<>();
+
     public static ChessGameInfoEntity valueOf(final int chessGameId, final Color color) {
         final String key = makeKey(chessGameId, color);
-        if (!CACHE.containsKey(key)) {
-            CACHE.put(key, new ChessGameInfoEntity(chessGameId, color));
-        }
-        return CACHE.get(key);
+
+        return CACHE.computeIfAbsent(key, k -> new ChessGameInfoEntity(chessGameId, color));
     }
 
-    private static final BiFunction<Integer, String, String> makeKeyFunction
-            = (integer, s) -> integer + s;
-    private static final Map<String, ChessGameInfoEntity> CACHE = new HashMap<>();
 
     public static ChessGameInfoEntity startWhite(final int chessGameId) {
         return valueOf(chessGameId, Color.WHITE);
     }
 
     private static String makeKey(final int chessGameId, final Color color) {
-        return makeKeyFunction.apply(chessGameId, color.getValue());
+        return MAKE_KEY_FUNCTION.apply(chessGameId, color.getValue());
     }
 
     public ChessGameInfoEntity reverseColor() {
