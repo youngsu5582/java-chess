@@ -6,8 +6,9 @@ import util.ConnectionGenerator;
 
 public class Application {
     public static void main(final String[] args) {
+        final var connectionGenerator = new ConnectionGenerator();
         final ChessController controller = new ChessController(
-                new ChessService(new PieceEntitySqlRepository(new ConnectionGenerator()), new ChessGameInfoSqlRepository(new ConnectionGenerator())));
+                new ChessService(new PieceEntitySqlRepository(connectionGenerator), new ChessGameInfoSqlRepository(connectionGenerator)));
         controller.start();
     }
 }
