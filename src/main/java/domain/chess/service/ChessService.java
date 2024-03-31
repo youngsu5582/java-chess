@@ -3,7 +3,7 @@ package domain.chess.service;
 import domain.chess.ChessBoard;
 import domain.chess.entity.ChessGameInfoEntity;
 import domain.chess.piece.Color;
-import domain.chess.exception.CheckMateException;
+import domain.chess.exception.GameEndException;
 import domain.chess.piece.Piece;
 import domain.chess.entity.PieceEntity;
 import domain.chess.piece.Pieces;
@@ -71,8 +71,8 @@ public class ChessService {
             final int gameId = chessBoard.getGameId();
             this.pieceEntityRepository.deleteAllByGameId(gameId);
             this.chessGameInfoRepository.deleteGameInfo(gameId);
-            throw new CheckMateException(chessBoard.getTurn()
-                                                   .getValue());
+            throw new GameEndException(chessBoard.getTurn()
+                                                 .getValue());
         }
         this.pieceEntityRepository.deletePiece(piece.getPieceId());
     }

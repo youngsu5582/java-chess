@@ -1,6 +1,6 @@
 package domain.chess.controller;
 
-import domain.chess.exception.CheckMateException;
+import domain.chess.exception.GameEndException;
 import domain.chess.dto.RouteDto;
 import domain.chess.service.ChessService;
 import domain.chess.util.BoardMapper;
@@ -39,8 +39,8 @@ public class ChessController {
                 final ChessCommand chessCommand = InputView.inputChessCommand();
                 gameStatus = commandHandler.get(chessCommand)
                                            .get();
-            } catch (final IllegalArgumentException | IllegalStateException | CheckMateException exception) {
-                if (exception instanceof CheckMateException) {
+            } catch (final IllegalArgumentException | IllegalStateException | GameEndException exception) {
+                if (exception instanceof GameEndException) {
                     gameId = null;
                 }
                 InputView.clear();

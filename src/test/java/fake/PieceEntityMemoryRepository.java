@@ -23,11 +23,9 @@ public class PieceEntityMemoryRepository implements PieceEntityRepository {
 
     @Override
     public List<PieceEntity> findAllByGameId(final int gameId) {
-        return this.map.entrySet()
+        return this.map.values()
                        .stream()
-                       .filter(pieceEntry -> pieceEntry.getValue()
-                                                       .gameId() == gameId)
-                       .map(Map.Entry::getValue)
+                       .filter(entity -> entity.gameId() == gameId)
                        .toList();
     }
 
