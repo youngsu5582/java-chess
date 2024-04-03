@@ -27,13 +27,10 @@ public class ChessBoard {
     }
 
     private void validatePieces(final Pieces pieces) {
-        final var kingCount = Arrays.stream(Color.values())
-                                    .map(pieces::findKingWithColor)
-                                    .filter(Optional::isPresent)
-                                    .toList();
+        final var kingCount = pieces.getKingCount();
 
-        if (kingCount.size() != Color.values().length) {
-            throw new IllegalStateException("왕이 두개가 아닙니다");
+        if (kingCount != Color.values().length) {
+            throw new IllegalStateException(String.format("왕이 총 %d 명입니다", kingCount));
         }
     }
 

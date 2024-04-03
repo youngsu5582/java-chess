@@ -1,7 +1,5 @@
 package domain.chess.piece;
 
-import domain.chess.piece.kind.King;
-
 import java.util.*;
 
 public class Pieces {
@@ -21,12 +19,10 @@ public class Pieces {
         piece.move(point);
     }
 
-    public Optional<King> findKingWithColor(final Color color) {
+    public long getKingCount() {
         return value.stream()
-                    .filter(piece -> piece.isEqualColor(color))
-                    .filter(King.class::isInstance)
-                    .map(King.class::cast)
-                    .findFirst();
+                    .filter(Piece::isKing)
+                    .count();
     }
 
     public Optional<Piece> findPieceWithPoint(final Point point) {
