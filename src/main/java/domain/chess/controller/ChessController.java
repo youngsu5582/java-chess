@@ -1,6 +1,5 @@
 package domain.chess.controller;
 
-import domain.chess.exception.GameEndException;
 import domain.chess.dto.RouteDto;
 import domain.chess.service.ChessService;
 import domain.chess.util.BoardMapper;
@@ -14,11 +13,9 @@ import java.util.function.Supplier;
 
 public class ChessController {
     private final ChessService chessService;
-    private Integer gameId;
 
     public ChessController(final ChessService chessService) {
         this.chessService = chessService;
-        this.gameId = null;
     }
 
     private final Map<ChessCommand, Supplier<GameStatus>> commandHandler = initializeHandler();
@@ -39,10 +36,7 @@ public class ChessController {
                 final ChessCommand chessCommand = InputView.inputChessCommand();
                 gameStatus = commandHandler.get(chessCommand)
                                            .get();
-            } catch (final IllegalArgumentException | IllegalStateException | GameEndException exception) {
-                if (exception instanceof GameEndException) {
-                    initializeCache();
-                }
+            } catch (final IllegalArgumentException | IllegalStateException exception) {
                 InputView.clear();
                 OutputView.printException(exception.getMessage());
             }
@@ -51,48 +45,31 @@ public class ChessController {
 
 
     private GameStatus gameStart() {
-        checkCacheExist();
-        gameId = Integer.parseInt(InputView.inputGameId());
+        final var gameId = Integer.parseInt(InputView.inputGameId());
         final var chessBoard = chessService.settingChessBoard(gameId);
         OutputView.printBoard(BoardMapper.toDto(chessBoard));
         return GameStatus.GAME_START;
     }
 
     private GameStatus pieceMove() {
-        checkCache();
         final var source = InputView.inputChessPoint();
         final var destination = InputView.inputChessPoint();
         final var routeDto = new RouteDto(source, destination);
 
+        final var gameId = Integer.parseInt(InputView.inputGameId());
         final var chessBoard = chessService.moveChessBoard(gameId, routeDto);
         OutputView.printBoard(BoardMapper.toDto(chessBoard));
         return GameStatus.GAME_PLAY;
     }
 
     private GameStatus gameStatus() {
-        checkCache();
+        final var gameId = Integer.parseInt(InputView.inputGameId());
         final var score = chessService.getChessScore(gameId);
         OutputView.printScore(score);
         return GameStatus.GAME_PLAY;
     }
 
     private GameStatus gameEnd() {
-        gameId = null;
         return GameStatus.GAME_END;
-    }
-
-    private void checkCache() {
-        if (gameId == null) {
-            throw new IllegalStateException(String.format("%s를 입력후 방 번호를 입력해주세요", ChessCommand.START.getCommandText()));
-        }
-    }
-
-    private void checkCacheExist() {
-        if (gameId != null) {
-            throw new IllegalStateException(String.format("이미 방 번호(%d)가 있습니다", gameId));
-        }
-    }
-    private void initializeCache(){
-        gameId = null;
     }
 }

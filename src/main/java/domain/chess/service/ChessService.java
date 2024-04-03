@@ -3,7 +3,6 @@ package domain.chess.service;
 import domain.chess.ChessBoard;
 import domain.chess.entity.ChessGameInfoEntity;
 import domain.chess.piece.Color;
-import domain.chess.exception.GameEndException;
 import domain.chess.piece.Piece;
 import domain.chess.entity.PieceEntity;
 import domain.chess.piece.Pieces;
@@ -56,22 +55,29 @@ public class ChessService {
 
     public ChessBoard moveChessBoard(final int gameId, final RouteDto routeDto) {
         final var chessBoard = getExistChessBoard(gameId);
-        chessBoard.findPiece(routeDto.getEndPoint())
-                  .ifPresent(endPointPiece -> processDelete(chessBoard, endPointPiece));
         final var piece = chessBoard.move(routeDto.getStartPoint(), routeDto.getEndPoint());
+        chessBoard.findPiece(routeDto.getEndPoint())
+                  .ifPresent(endPointPiece -> handleDeleteProcess(chessBoard, endPointPiece));
         processMove(chessBoard, piece);
-
         return chessBoard;
     }
 
-    private void processDelete(final ChessBoard chessBoard, final Piece piece) {
+    private void handleDeleteProcess(final ChessBoard chessBoard, final Piece piece) {
         if (piece.isKing()) {
-            final int gameId = chessBoard.getGameId();
-            this.pieceEntityRepository.deleteAllByGameId(gameId);
-            this.chessGameInfoRepository.deleteGameInfo(gameId);
-            throw new GameEndException(chessBoard.getTurn()
-                                                 .getValue());
+            processDeleteAll(chessBoard);
         }
+        processDelete(piece);
+    }
+
+
+    private void processDeleteAll(final ChessBoard chessBoard) {
+        final int gameId = chessBoard.getGameId();
+        this.pieceEntityRepository.deleteAllByGameId(gameId);
+        this.chessGameInfoRepository.deleteGameInfo(gameId);
+    }
+
+
+    private void processDelete(final Piece piece) {
         this.pieceEntityRepository.deletePiece(piece.getPieceId());
     }
 
