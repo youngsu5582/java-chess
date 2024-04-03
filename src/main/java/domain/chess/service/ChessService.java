@@ -56,12 +56,11 @@ public class ChessService {
 
     public ChessBoard moveChessBoard(final int gameId, final RouteDto routeDto) {
         final var chessBoard = getExistChessBoard(gameId);
-        final var optionalPiece = chessBoard.findPiece(routeDto.getEndPoint());
-
+        chessBoard.findPiece(routeDto.getEndPoint())
+                  .ifPresent(endPointPiece -> processDelete(chessBoard, endPointPiece));
         final var piece = chessBoard.move(routeDto.getStartPoint(), routeDto.getEndPoint());
-        optionalPiece.ifPresent(endPointPiece -> processDelete(chessBoard, endPointPiece));
-
         processMove(chessBoard, piece);
+
         return chessBoard;
     }
 

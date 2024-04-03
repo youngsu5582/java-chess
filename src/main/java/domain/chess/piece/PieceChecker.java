@@ -40,8 +40,8 @@ public class PieceChecker implements PieceCheckable {
 
     @Override
     public boolean isEmptyPoint(final Point point) {
-        final Optional<Piece> optionalPiece = this.findPieceWithPoint(point);
-        return optionalPiece.isEmpty();
+        return this.findPieceWithPoint(point)
+                   .isEmpty();
     }
 
 
