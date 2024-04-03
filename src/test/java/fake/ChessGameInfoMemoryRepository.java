@@ -46,6 +46,6 @@ public class ChessGameInfoMemoryRepository implements ChessGameInfoRepository {
 
     @Override
     public Optional<ChessGameInfoEntity> getChessGameInfoWithGameId(final int gameId) {
-        return Optional.ofNullable(map.get(gameId));
+        return Optional.of(map.get(gameId));
     }
 }

@@ -77,7 +77,7 @@ public class ChessGameInfoSqlRepository implements ChessGameInfoRepository {
         if (resultSet.next()) {
             final var id = resultSet.getInt("game_id");
             final var color = resultSet.getString("color");
-            return Optional.ofNullable(new ChessGameInfoEntity(id, Color.from(color)));
+            return Optional.of(new ChessGameInfoEntity(id, Color.from(color)));
         }
         return Optional.empty();
     }

@@ -59,18 +59,6 @@ public class PieceEntitySqlRepository implements PieceEntityRepository {
         return pieces;
     }
 
-    private Optional<PieceEntity> parse(final ResultSet resultSet) throws SQLException {
-
-        final String pieceId = resultSet.getString("piece_id");
-        final int gameId = resultSet.getInt("game_id");
-        final String point = resultSet.getString("point");
-        final String color = resultSet.getString("color");
-        final String kind = resultSet.getString("kind");
-
-        return Optional.ofNullable(new PieceEntity(point, color, kind, pieceId, gameId));
-    }
-
-
     @Override
     public boolean deletePiece(final String pieceId) {
         try (final var connection = this.connectionGenerator.getConnection()) {
@@ -126,5 +114,15 @@ public class PieceEntitySqlRepository implements PieceEntityRepository {
         } catch (final SQLException e) {
             throw exceptionMapper.apply(e);
         }
+    }
+    private Optional<PieceEntity> parse(final ResultSet resultSet) throws SQLException {
+
+        final String pieceId = resultSet.getString("piece_id");
+        final int gameId = resultSet.getInt("game_id");
+        final String point = resultSet.getString("point");
+        final String color = resultSet.getString("color");
+        final String kind = resultSet.getString("kind");
+
+        return Optional.of(new PieceEntity(point, color, kind, pieceId, gameId));
     }
 }
